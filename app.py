@@ -65,4 +65,4 @@ if __name__ == '__main__':
     st.write("data ready")
     ## Load dataset
     ## Load model
-    main()
+
