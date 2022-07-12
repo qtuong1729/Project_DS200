@@ -59,12 +59,12 @@ def LR_model(choice_input):
 
         if st.button('Dự đoán'):
             if not selected_rows.empty:
-                X = selected_rows
+                X = selected_rows.iloc[:, :-1]
                 pred = prediction(X, model_lr)
 
                 # Xuất ra màn hình
                 results = pd.DataFrame({'Giá dự đoán': pred,
-                                        'Giá thực tế': selected_rows.death_rate})
+                                        'Giá thực tế': selected_rows.TongGia})
                 st.write(results)
             else:
                 st.error('Hãy chọn dữ liệu trước')
@@ -79,13 +79,12 @@ def RF_model(choice_input):
 
         # Chọn dữ liệu từ mẫu
         selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        #selected_rows = data.collect()[selected_indices[-1]]
-
+        selected_rows = pd_df.loc[selected_indices]
         st.write('#### Kết quả')
 
         if st.button('Dự đoán'):
             if not selected_rows.empty:
-                X = selected_rows
+                X = selected_rows.iloc[:, :-1]
                 pred = prediction(X, model_lr)
 
                 # Xuất ra màn hình
@@ -102,7 +101,9 @@ def main():
     st.title('Dự đoán giá bất động sản')
     model_list = ['Mô hình Linear Regression',
                       'Mô hình Random Forest',
-                      'Mô hình Gradient Boosted']
+                      'Mô hình Gradient Boosted',
+                      'Mô hình Decision Tree',
+                      'Mô hình Isotonic Regression']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
     #st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
@@ -151,6 +152,8 @@ if __name__ == '__main__':
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
     model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
+    model_dt = DecisionTreeRegressionModel.load("./model/decision_tree/dt_basic")
+    model_ir = DecisionTreeRegressionModel.load("./model/isotonic_regression/ir_basic")
 
 
     main()
