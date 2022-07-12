@@ -38,7 +38,7 @@ st.write("## Create RDD from a Python list")
 # spark.stop()
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
-    df = spark.read.format('org.apache.spark.sql.json').load("qtuong1729/Project_DS200/clean/clean.json")
+    df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
     st.write("data ready")
     ## Load dataset
     ## Load model
