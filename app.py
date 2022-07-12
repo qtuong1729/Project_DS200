@@ -5,7 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
-from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel
+from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, BTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
@@ -80,7 +80,7 @@ def RF_model(choice_input):
 
         # Chọn dữ liệu từ mẫu
         selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = data.collect()[selected_indices[-1]]
+        #selected_rows = data.collect()[selected_indices[-1]]
 
         st.write('#### Kết quả')
 
@@ -102,7 +102,8 @@ def RF_model(choice_input):
 def main():
     st.title('Dự đoán giá bất động sản')
     model_list = ['Mô hình Linear Regression',
-                      'Mô hình Random Forest']
+                      'Mô hình Random Forest',
+                      'Mô hình Gradient Boosted']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
     #st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
@@ -113,6 +114,9 @@ def main():
         LR_model(choice_input)
 
     elif choice_model == 'Mô hình Random Forest':
+        RF_model(choice_input)
+
+    elif choice_model == 'Mô hình Gradient Boosted':
         RF_model(choice_input)
 
 if __name__ == '__main__':
@@ -147,6 +151,7 @@ if __name__ == '__main__':
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
+    model_gbt = BTRegressionModel.load("./model/gradient_boosted/gbt_basic")
 
 
     main()
