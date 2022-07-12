@@ -3,4 +3,4 @@ Dự đoán giá bất động sản theo thời gian thực với dữ liệu t
 
 Sử dụng PySpark SQL, PySpark Mlib, Streamlib để xây dựng hệ thống
 
-Web app demo được deploy tại [https://blueisntsad-bigdata-demo-app-dataframe-oj6v97.streamlitapp.com/](Streamlit Cloud)
+Web app demo được deploy tại [https://qtuong1729-project-ds200-app-59icpx.streamlitapp.com/](Streamlit Cloud)
