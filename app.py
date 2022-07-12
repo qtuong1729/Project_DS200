@@ -5,7 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
-from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressorModel
+from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     assembler = VectorAssembler(inputCols = features, outputCol="features")
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
-    model_rf = RandomForestRegressorModel.load("./model/random_forest/rf_basic")
+    model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
     st.write("have lr")
 
 
