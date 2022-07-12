@@ -5,7 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
-from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, BTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel
+from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, BTRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
