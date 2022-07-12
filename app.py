@@ -47,20 +47,21 @@ def prediction(samples, model):
 
 # spark.stop()
 def main():
-    st.title('Dự đoán tỷ lệ tử vong trên quy mô dân số do Covid-19')
+    st.title('Dự đoán giá bất động sản')
 
     features_train = ['Mô hình 1',
                       'Mô hình 2']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
-
+    st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
+    st.write("hello")
     choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
 
-    if choice_model == 'Mô hình 1':
-        full_features_modeling(choice_input)
+    #if choice_model == 'Mô hình 1':
+    #    full_features_modeling(choice_input)
 
-    elif choice_model == 'Mô hình 2':
-        select_features_modeling(choice_input)
+#    elif choice_model == 'Mô hình 2':
+#        select_features_modeling(choice_input)
 
 
 if __name__ == '__main__':
