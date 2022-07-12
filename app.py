@@ -12,7 +12,9 @@ from pyspark.ml.evaluation import RegressionEvaluator
 def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
-    assembled_X = assembler.transform(X_)
+    ###########################
+    
+    ###########################
     st.write("tranform")
     return assembled_X
 
@@ -21,7 +23,6 @@ def prediction(samples, model):
     # Encode dữ liệu
     X_scaled = tranformFetures(samples, assembler)
     # Predict
-    st.write("predict")
     return model.predict(X_scaled)
 
 def LR_model():
