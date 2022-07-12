@@ -142,7 +142,7 @@ def ir_model(choice_input):
                 st.error('Hãy chọn dữ liệu trước')
 
 
-def ir_model(choice_input):
+def ir_model():
     st.subheader('Mô hình Mô hình Isotonic Regression')
     if choice_input == 'Dữ liệu mẫu':
         st.write('#### Sample dataset', pd_df)
@@ -176,22 +176,22 @@ def main():
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
 
     if choice_model == 'Mô hình Linear Regression':
-        LR_model(choice_input)
+        LR_model()
 
     elif choice_model == 'Mô hình Random Forest':
-        RF_model(choice_input)
+        RF_model()
 
     elif choice_model == 'Mô hình Gradient Boosting':
-        GBT_model(choice_input)
+        GBT_model()
 
     elif choice_model == 'Mô hình Decision Tree':
-        DT_model(choice_input)
+        DT_model()
 
     elif choice_model == 'Mô hình Isotonic Regression':
-        IR_model(choice_input)
+        IR_model()
 
     elif choice_model == 'Mô hình FMR':
-        FMR_model(choice_input)
+        FMR_model()
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
