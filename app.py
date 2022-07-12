@@ -9,7 +9,7 @@ from pyspark.ml.regression import LinearRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
-def saclerFetures(X, assembler):
+def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
     assembled_X = assembler.transform(X_)
@@ -18,7 +18,7 @@ def saclerFetures(X, assembler):
 def prediction(samples, model):
     st.write("predict")
     # Encode dữ liệu
-    X_scaled = saclerFetures(samples, assembler)
+    X_scaled = tranformFetures(samples, assembler)
     # Predict
     return model.predict(X_scaled)
 #l = list(range(10))
@@ -54,7 +54,7 @@ def LR_model(choice_input):
 
         # Chọn dữ liệu từ mẫu
         selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
+        selected_rows = data.collect()[selected_indices]
 
         st.write('#### Kết quả')
 
