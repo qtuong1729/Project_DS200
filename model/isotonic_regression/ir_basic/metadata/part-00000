@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.regression.IsotonicRegressionModel","timestamp":1657606177723,"sparkVersion":"3.3.0","uid":"IsotonicRegression_bab941038cf6","paramMap":{"labelCol":"TongGia","featuresCol":"features_scaled"},"defaultParamMap":{"predictionCol":"prediction","isotonic":true,"labelCol":"label","featureIndex":0,"featuresCol":"features"}}
