@@ -23,7 +23,7 @@ def prediction(samples, model):
     # Predict
     return model.predict(X_scaled)
 
-def LR_model(choice_input):
+def LR_model():
     st.subheader('Mô hình Linear Regression')
     st.write('#### Sample dataset', pd_df)
 
@@ -46,7 +46,7 @@ def LR_model(choice_input):
 
 
 
-def RF_model(choice_input):
+def RF_model():
     st.subheader('Mô hình Random Forest')
     st.write('#### Sample dataset', pd_df)
 
@@ -69,7 +69,7 @@ def RF_model(choice_input):
 
 
 
-def GBT_model(choice_input):
+def GBT_model():
     st.subheader('Mô hình Mô hình Gradient Boosting')
     st.write('#### Sample dataset', pd_df)
 
@@ -92,7 +92,7 @@ def GBT_model(choice_input):
 
 
 
-def DT_model(choice_input):
+def DT_model():
     st.subheader('Mô hình Decision Tree')
     st.write('#### Sample dataset', pd_df)
 
@@ -115,7 +115,7 @@ def DT_model(choice_input):
 
 
 
-def ir_model(choice_input):
+def ir_model():
     st.subheader('Mô hình Mô hình Isotonic Regression')
     st.write('#### Sample dataset', pd_df)
 
