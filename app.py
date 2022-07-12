@@ -42,7 +42,7 @@ st.write("## Create RDD from a Python list")
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
     df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
-    st.write("data ready")
+    st.write("df ready")
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
     df=df.withColumnRenamed("T.T thương mại tòa nhà","TT thương mại tòa nhà")
     df=df.withColumnRenamed("T.T thương mại","TT thương mại")
@@ -62,7 +62,6 @@ if __name__ == '__main__':
     for col_name in cols:
         df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
-    data.haed(10)
     st.write("data ready")
     ## Load dataset
     ## Load model
