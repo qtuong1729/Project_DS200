@@ -25,144 +25,138 @@ def prediction(samples, model):
 
 def LR_model(choice_input):
     st.subheader('Mô hình Linear Regression')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_lr)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_lr)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
 
 def RF_model(choice_input):
     st.subheader('Mô hình Random Forest')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_rf)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_rf)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.death_rate})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
 
 def GBT_model(choice_input):
     st.subheader('Mô hình Mô hình Gradient Boosting')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_gbt)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_gbt)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.death_rate})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
 
 def DT_model(choice_input):
     st.subheader('Mô hình Decision Tree')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_dt)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_dt)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
 
 def ir_model(choice_input):
     st.subheader('Mô hình Mô hình Isotonic Regression')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_ir)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_ir)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
-                                        'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
+                                    'Giá thực tế': selected_rows.TongGia})
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
-def ir_model():
+def fmr_model():
     st.subheader('Mô hình Mô hình Isotonic Regression')
-    if choice_input == 'Dữ liệu mẫu':
-        st.write('#### Sample dataset', pd_df)
+    st.write('#### Sample dataset', pd_df)
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_ir)
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model_ir)
 
-                # Xuất ra màn hình
-                results = pd.DataFrame({'Giá dự đoán': pred,
+            # Xuất ra màn hình
+            results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
 
 
 def main():
