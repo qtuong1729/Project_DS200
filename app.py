@@ -8,7 +8,6 @@ from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel, FMRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
-import plotly.figure_factory as ff
 
 def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
