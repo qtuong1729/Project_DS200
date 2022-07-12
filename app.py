@@ -54,8 +54,7 @@ def LR_model(choice_input):
 
         # Chọn dữ liệu từ mẫu
         selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        st.write("selected_indices ",selected_indices[-1])
-        #selected_rows = data.collect()[selected_indices]
+        selected_rows = data.collect()[selected_indices[-1]]
 
         st.write('#### Kết quả')
 
