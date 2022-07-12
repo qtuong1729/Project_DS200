@@ -8,6 +8,7 @@ from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel, FMRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
+import plotly.figure_factory as ff
 
 def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
@@ -167,6 +168,10 @@ def FMR_model():
 
 def main():
     st.title('Dự đoán giá bất động sản')
+    fig = ff.create_distplot(
+         hist_data, group_labels)
+    st.plotly_chart(fig, use_container_width=True)
+    #st.line_chart(pd_df['LoaiBDS_idx','TongGia'])
     model_list = ['Mô hình Linear Regression',
                       'Mô hình Random Forest',
                       'Mô hình Gradient Boosting',
