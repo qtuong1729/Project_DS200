@@ -153,7 +153,7 @@ if __name__ == '__main__':
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
     model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
     model_dt = DecisionTreeRegressionModel.load("./model/decision_tree/dt_basic")
-    model_ir = DecisionTreeRegressionModel.load("./model/isotonic_regression/ir_basic")
+    model_ir = IsotonicRegressionModel.load("./model/isotonic_regression/ir_basic")
 
 
     main()
