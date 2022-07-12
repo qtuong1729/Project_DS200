@@ -101,19 +101,19 @@ def RF_model(choice_input):
 
 def main():
     st.title('Dự đoán giá bất động sản')
-    features_train = ['Mô hình Linear Regression',
+    model_list = ['Mô hình Linear Regression',
                       'Mô hình Random Forest']
-    choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
+    choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
     #st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
     #st.write("hello")
     choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
 
-    if choice_model == 'Mô hình 1':
+    if choice_model == 'Mô hình Linear Regression':
         LR_model(choice_input)
 
-#    elif choice_model == 'Mô hình 2':
-#        select_features_modeling(choice_input)
+    elif choice_model == 'Mô hình Random Forest':
+        RF_model(choice_input)
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
