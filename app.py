@@ -5,7 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
-from pyspark.ml.regression import LinearRegressionModel
+from pyspark.ml.regression import LinearRegressionModel, RandomForestModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
@@ -75,8 +75,8 @@ def LR_model(choice_input):
 # spark.stop()
 def main():
     st.title('Dự đoán giá bất động sản')
-    features_train = ['Mô hình 1',
-                      'Mô hình 2']
+    features_train = ['Mô hình Linear Regression',
+                      'Mô hình Random Forest']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
     #st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
@@ -120,6 +120,7 @@ if __name__ == '__main__':
     assembler = VectorAssembler(inputCols = features, outputCol="features")
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
+    model_rf = RandomForestModel.load("./model/linear_regression/lr_basic")
     #st.write("have lr")
 
 
