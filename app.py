@@ -6,29 +6,21 @@ from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel
+from pyspark.ml.feature import VectorAssembler, StandardScaler
+from pyspark.ml.evaluation import RegressionEvaluator
 
-def encode(X):
+def saclerFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
+    assembled_X = assembler.transform(X_)
     
-    # Biến categories có thứ tự
-    X_[['Income group']] = ode.transform(X_[['Income group']])
-    
-    # Biến categories không thứ tự
-    f_ohe = ohe.transform(X_[['Continent', 'WHO Region']])
-    labels = np.array(ohe.categories_).ravel()
-    cat_ohe = pd.DataFrame(f_ohe, columns=labels, index=X_.index)
-
-    X_ = X_.drop(['Continent', 'WHO Region'], axis=1)
-    X_ = pd.concat([X_, cat_ohe], axis=1)
-    
-    return X_
+    return assembled_X
 def prediction(samples, model):
     st.write("predict")
     # Encode dữ liệu
-    #data_encode = encode(data.iloc[:, :-1])
+    X_scaled = saclerFetures(samples, assembler)
     # Predict
-    return model.predict(X)
+    return model.predict(X_scaled)
 #l = list(range(10))
 # st.write(l)
 
@@ -123,7 +115,9 @@ if __name__ == '__main__':
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     #st.write("data ready")
     pd_df = data.toPandas()
-    #st_df = st.dataframe(pd_df)
+    features = data.columns
+    features = [ele for ele in features if ele not in ['MaTin','TongGia','Gia/m2']]
+    assembler = VectorAssembler(inputCols = features, outputCol="features")
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     #st.write("have lr")
