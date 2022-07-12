@@ -11,6 +11,13 @@ st.write("[Link to Spark window](http://localhost:4040)")
 
 st.write("## Create RDD from a Python list")
 
+def prediction(samples, model):
+
+    # Encode dữ liệu
+    #data_encode = encode(data.iloc[:, :-1])
+
+    # Predict
+    return model.predict(X)
 #l = list(range(10))
 # st.write(l)
 
@@ -39,6 +46,23 @@ st.write("## Create RDD from a Python list")
 
 
 # spark.stop()
+def main():
+    st.title('Dự đoán tỷ lệ tử vong trên quy mô dân số do Covid-19')
+
+    features_train = ['Mô hình 1',
+                      'Mô hình 2]
+    choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
+
+    input = ['Dữ liệu mẫu', 'Tự chọn']
+    choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
+
+    if choice_model == 'Mô hình 1':
+        full_features_modeling(choice_input)
+
+    elif choice_model == 'Mô hình 2':
+        select_features_modeling(choice_input)
+
+
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
     df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
@@ -65,4 +89,6 @@ if __name__ == '__main__':
     st.write("data ready")
     ## Load dataset
     ## Load model
+    
+    main()
 
