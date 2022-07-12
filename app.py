@@ -72,7 +72,7 @@ def LR_model(choice_input):
 # spark.stop()
 def main():
     st.title('Dự đoán giá bất động sản')
-
+    st_df = st.dataframe(pd_df)
     features_train = ['Mô hình 1',
                       'Mô hình 2']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
@@ -81,8 +81,8 @@ def main():
     st.write("hello")
     choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
 
-    #if choice_model == 'Mô hình 1':
-    #    full_features_modeling(choice_input)
+    if choice_model == 'Mô hình 1':
+        LR_model(choice_input)
 
 #    elif choice_model == 'Mô hình 2':
 #        select_features_modeling(choice_input)
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     #st.write("data ready")
     pd_df = data.toPandas()
-    st_df = st.dataframe(pd_df)
+    #st_df = st.dataframe(pd_df)
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     #st.write("have lr")
