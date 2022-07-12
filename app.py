@@ -88,6 +88,8 @@ if __name__ == '__main__':
         df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     st.write("data ready")
+
+    st.write('#### Some sample dataset', data.show(10))
     ## Load dataset
     ## Load model
     
