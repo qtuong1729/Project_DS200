@@ -13,10 +13,9 @@ st.write("[Link to Spark window](http://localhost:4040)")
 st.write("## Create RDD from a Python list")
 
 def prediction(samples, model):
-
+    st.write("predict")
     # Encode dữ liệu
     #data_encode = encode(data.iloc[:, :-1])
-
     # Predict
     return model.predict(X)
 #l = list(range(10))
@@ -45,7 +44,31 @@ def prediction(samples, model):
 #st.write(file_rdd.flatMap(lambda sentence: sentence.split()).map(lambda word: (word, 1)).reduceByKey(lambda x,y: x+y).collect())
 #st.write()
 
+def LR_model(choice_input):
+    st.subheader('Mô hình LR')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
 
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = data.pd_df.loc[selected_indices]
+
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_lr)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.death_rate})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
+    elif choice_input == 'Tự chọn':
+        st.write('Coming soon')
 # spark.stop()
 def main():
     st.title('Dự đoán giá bất động sản')
@@ -64,17 +87,16 @@ def main():
 #    elif choice_model == 'Mô hình 2':
 #        select_features_modeling(choice_input)
 
-
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
     ## Load dataset
     df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
-    st.write("df ready")
+    #st.write("df ready")
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
     df=df.withColumnRenamed("T.T thương mại tòa nhà","TT thương mại tòa nhà")
     df=df.withColumnRenamed("T.T thương mại","TT thương mại")
     df=df.withColumnRenamed("Bàn ghế P.Khách","Bàn ghế PKhách")
-    st.write("create cols")
+    #st.write("create cols")
     cols = ['Ban công riêng', 'Chỗ để ô tô', 'Cà phê', 'Công viên tòa nhà', 'Hầm để xe', 'Hồ bơi chung', 'Nhà hàng',
             'Phòng sinh hoạt chung', 'Phòng tập gym', 'siêu thị mini tòa nhà', 'Sân chơi trẻ em', 'Sân nướng BBQ',
             'TT thương mại tòa nhà', 'Bệnh viện', 'Cao tốc', 'Chỗ đậu ô tô', 'Chợ', 'Công viên', 'Cảng biển',
@@ -85,15 +107,16 @@ if __name__ == '__main__':
             'Dàn Karaoke', 'Giường ngủ', 'Kệ TV', 'Máy giặt', 'Máy hút mùi', 'Máy lạnh', 'Máy rửa chén', 'Tivi',
             'Tủ bếp', 'Tủ lạnh', 'Tủ quần áo', 'Tủ trang trí', 'Vòi hoa sen', 'Điện ba pha', 'Thân thiện', 'Trí thức',
             'Bảo vệ 24/24', 'Carmera an ninh', 'Đường bê tông', 'Đường trải nhựa', 'Đường trải đá', 'Đường đất']
-    st.write("have cols")
+    #st.write("have cols")
     for col_name in cols:
         df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
-    st.write("data ready")
-    st_df = st.dataframe(data.toPandas())
+    #st.write("data ready")
+    pd_df = data.toPandas()
+    st_df = st.dataframe(pd_df)
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
-    st.write("have lr")
+    #st.write("have lr")
 
 
     main()
