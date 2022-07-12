@@ -115,8 +115,8 @@ def DT_model():
 
 
 
-def ir_model():
-    st.subheader('Mô hình Mô hình Isotonic Regression')
+def IR_model():
+    st.subheader('Mô hình Isotonic Regression')
     st.write('#### Sample dataset', pd_df)
 
     # Chọn dữ liệu từ mẫu
@@ -137,8 +137,8 @@ def ir_model():
             st.error('Hãy chọn dữ liệu trước')
 
 
-def fmr_model():
-    st.subheader('Mô hình Mô hình Isotonic Regression')
+def FMR_model():
+    st.subheader('Mô hình FMR')
     st.write('#### Sample dataset', pd_df)
 
     # Chọn dữ liệu từ mẫu
