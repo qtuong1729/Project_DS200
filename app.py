@@ -72,7 +72,33 @@ def LR_model(choice_input):
 
     elif choice_input == 'Tự chọn':
         st.write('Coming soon')
-# spark.stop()
+
+def RF_model(choice_input):
+    st.subheader('Mô hình RF')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
+
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = data.collect()[selected_indices[-1]]
+
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows
+                pred = prediction(X, model_lr)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.death_rate})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
+    elif choice_input == 'Tự chọn':
+        st.write('Coming soon')
+
 def main():
     st.title('Dự đoán giá bất động sản')
     features_train = ['Mô hình Linear Regression',
@@ -121,7 +147,6 @@ if __name__ == '__main__':
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
-    st.write("have lr")
 
 
     main()
