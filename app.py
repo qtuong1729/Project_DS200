@@ -13,7 +13,9 @@ def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
     ###########################
-    
+    X_=spark.createDataFrame(X_)
+    assembled_X = assembler.transform(X_)
+    scaled_X = standardScaler.fit(assembled_df).transform(assembled_X)
     ###########################
     st.write("tranform")
     return assembled_X
@@ -220,6 +222,8 @@ if __name__ == '__main__':
     features = data.columns
     features = [ele for ele in features if ele not in ['MaTin','TongGia','Gia/m2']]
     assembler = VectorAssembler(inputCols = features, outputCol="features")
+    standardScaler = StandardScaler(inputCol="features", outputCol="features_scaled")
+
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
