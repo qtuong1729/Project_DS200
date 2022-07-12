@@ -151,7 +151,7 @@ if __name__ == '__main__':
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
     model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
-    model_gbt = BTRegressionModel.load("./model/gradient_boosted/gbt_basic")
+    model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
 
 
     main()
