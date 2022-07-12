@@ -14,6 +14,7 @@ def tranformFetures(X, assembler):
     X_ = X.copy()
     ###########################
     X_=spark.createDataFrame(X_)
+    st.write("sparkDf")
     assembled_X = assembler.transform(X_)
     scaled_X = standardScaler.fit(assembled_df).transform(assembled_X)
     ###########################
