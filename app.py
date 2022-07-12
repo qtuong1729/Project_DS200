@@ -42,11 +42,12 @@ st.write("## Create RDD from a Python list")
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
     df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
-
+    st.write("data ready")
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
     df=df.withColumnRenamed("T.T thương mại tòa nhà","TT thương mại tòa nhà")
     df=df.withColumnRenamed("T.T thương mại","TT thương mại")
     df=df.withColumnRenamed("Bàn ghế P.Khách","Bàn ghế PKhách")
+    st.write("create cols")
     cols = ['Ban công riêng', 'Chỗ để ô tô', 'Cà phê', 'Công viên tòa nhà', 'Hầm để xe', 'Hồ bơi chung', 'Nhà hàng',
             'Phòng sinh hoạt chung', 'Phòng tập gym', 'siêu thị mini tòa nhà', 'Sân chơi trẻ em', 'Sân nướng BBQ',
             'TT thương mại tòa nhà', 'Bệnh viện', 'Cao tốc', 'Chỗ đậu ô tô', 'Chợ', 'Công viên', 'Cảng biển',
@@ -57,7 +58,7 @@ if __name__ == '__main__':
             'Dàn Karaoke', 'Giường ngủ', 'Kệ TV', 'Máy giặt', 'Máy hút mùi', 'Máy lạnh', 'Máy rửa chén', 'Tivi',
             'Tủ bếp', 'Tủ lạnh', 'Tủ quần áo', 'Tủ trang trí', 'Vòi hoa sen', 'Điện ba pha', 'Thân thiện', 'Trí thức',
             'Bảo vệ 24/24', 'Carmera an ninh', 'Đường bê tông', 'Đường trải nhựa', 'Đường trải đá', 'Đường đất']
-        
+    st.write("have cols")
     for col_name in cols:
         df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
@@ -65,3 +66,4 @@ if __name__ == '__main__':
     st.write("data ready")
     ## Load dataset
     ## Load model
+    main()
