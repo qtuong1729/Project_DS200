@@ -15,40 +15,16 @@ def tranformFetures(X, assembler):
     assembled_X = assembler.transform(X_)
     
     return assembled_X
+
 def prediction(samples, model):
     st.write("predict")
     # Encode dữ liệu
     X_scaled = tranformFetures(samples, assembler)
     # Predict
     return model.predict(X_scaled)
-#l = list(range(10))
-# st.write(l)
-
-#rdd = sc.parallelize(l)
-#rdd.cache()
-#st.write(rdd)
-
-#st.write("## Get results through actions")
-#st.write(rdd.collect())
-#st.write(rdd.take(3))
-#st.write(rdd.count())
-
-#st.write("## Transform RDDs")
-#st.write(rdd.filter(lambda x: x%2==0).collect())  # talk about lazy evaluation here: filter still non evaluated rdd
-#st.write(rdd.map(lambda x: x*2).collect()) 
-#st.write(rdd.map(lambda x: x*2).reduce(lambda x, y: x + y))  # reduce runs all previous rdds
-# Compare the two following
-#st.write(rdd.map(lambda x: list(range(x))).collect()) 
-#st.write(rdd.flatMap(lambda x: list(range(x))).collect()) 
-
-#st.write("## Wordcount")
-#file_rdd = sc.textFile("lorem.txt")
-#st.write(file_rdd.collect())  # so what's inside ?
-#st.write(file_rdd.flatMap(lambda sentence: sentence.split()).map(lambda word: (word, 1)).reduceByKey(lambda x,y: x+y).collect())
-#st.write()
 
 def LR_model(choice_input):
-    st.subheader('Mô hình LR')
+    st.subheader('Mô hình Linear Regression')
     if choice_input == 'Dữ liệu mẫu':
         st.write('#### Sample dataset', pd_df)
 
@@ -73,7 +49,7 @@ def LR_model(choice_input):
         st.write('Coming soon')
 
 def RF_model(choice_input):
-    st.subheader('Mô hình RF')
+    st.subheader('Mô hình Random Forest')
     if choice_input == 'Dữ liệu mẫu':
         st.write('#### Sample dataset', pd_df)
 
@@ -85,7 +61,31 @@ def RF_model(choice_input):
         if st.button('Dự đoán'):
             if not selected_rows.empty:
                 X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_lr)
+                pred = prediction(X, model_rf)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.death_rate})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
+    elif choice_input == 'Tự chọn':
+        st.write('Coming soon')
+def GBT_model(choice_input):
+    st.subheader('Mô hình Mô hình Gradient Boosting')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
+
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = pd_df.loc[selected_indices]
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_gbt)
 
                 # Xuất ra màn hình
                 results = pd.DataFrame({'Giá dự đoán': pred,
@@ -97,11 +97,63 @@ def RF_model(choice_input):
     elif choice_input == 'Tự chọn':
         st.write('Coming soon')
 
+
+def DT_model(choice_input):
+    st.subheader('Mô hình Decision Tree')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
+
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = pd_df.loc[selected_indices]
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_dt)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.TongGia})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
+    elif choice_input == 'Tự chọn':
+        st.write('Coming soon')
+
+
+def ir_model(choice_input):
+    st.subheader('Mô hình Mô hình Isotonic Regression')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
+
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = pd_df.loc[selected_indices]
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_ir)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.TongGia})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
+    elif choice_input == 'Tự chọn':
+        st.write('Coming soon')
+
 def main():
     st.title('Dự đoán giá bất động sản')
     model_list = ['Mô hình Linear Regression',
                       'Mô hình Random Forest',
-                      'Mô hình Gradient Boosted',
+                      'Mô hình Gradient Boosting',
                       'Mô hình Decision Tree',
                       'Mô hình Isotonic Regression']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
@@ -116,7 +168,7 @@ def main():
     elif choice_model == 'Mô hình Random Forest':
         RF_model(choice_input)
 
-    elif choice_model == 'Mô hình Gradient Boosted':
+    elif choice_model == 'Mô hình Gradient Boosting':
         RF_model(choice_input)
 
 if __name__ == '__main__':
