@@ -5,7 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
-from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel
+from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel, FMRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
 
@@ -45,8 +45,7 @@ def LR_model(choice_input):
             else:
                 st.error('Hãy chọn dữ liệu trước')
 
-    elif choice_input == 'Tự chọn':
-        st.write('Coming soon')
+
 
 def RF_model(choice_input):
     st.subheader('Mô hình Random Forest')
@@ -70,8 +69,8 @@ def RF_model(choice_input):
             else:
                 st.error('Hãy chọn dữ liệu trước')
 
-    elif choice_input == 'Tự chọn':
-        st.write('Coming soon')
+
+
 def GBT_model(choice_input):
     st.subheader('Mô hình Mô hình Gradient Boosting')
     if choice_input == 'Dữ liệu mẫu':
@@ -94,8 +93,6 @@ def GBT_model(choice_input):
             else:
                 st.error('Hãy chọn dữ liệu trước')
 
-    elif choice_input == 'Tự chọn':
-        st.write('Coming soon')
 
 
 def DT_model(choice_input):
@@ -120,8 +117,6 @@ def DT_model(choice_input):
             else:
                 st.error('Hãy chọn dữ liệu trước')
 
-    elif choice_input == 'Tự chọn':
-        st.write('Coming soon')
 
 
 def ir_model(choice_input):
@@ -146,8 +141,29 @@ def ir_model(choice_input):
             else:
                 st.error('Hãy chọn dữ liệu trước')
 
-    elif choice_input == 'Tự chọn':
-        st.write('Coming soon')
+
+def ir_model(choice_input):
+    st.subheader('Mô hình Mô hình Isotonic Regression')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
+
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = pd_df.loc[selected_indices]
+        st.write('#### Kết quả')
+
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_ir)
+
+                # Xuất ra màn hình
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.TongGia})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+
 
 def main():
     st.title('Dự đoán giá bất động sản')
@@ -155,12 +171,9 @@ def main():
                       'Mô hình Random Forest',
                       'Mô hình Gradient Boosting',
                       'Mô hình Decision Tree',
-                      'Mô hình Isotonic Regression']
+                      'Mô hình Isotonic Regression',
+                      'Mô hình FMR']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
-    #st.write("hello")
-    input = ['Dữ liệu mẫu', 'Tự chọn']
-    #st.write("hello")
-    choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
 
     if choice_model == 'Mô hình Linear Regression':
         LR_model(choice_input)
@@ -169,7 +182,16 @@ def main():
         RF_model(choice_input)
 
     elif choice_model == 'Mô hình Gradient Boosting':
-        RF_model(choice_input)
+        GBT_model(choice_input)
+
+    elif choice_model == 'Mô hình Decision Tree':
+        DT_model(choice_input)
+
+    elif choice_model == 'Mô hình Isotonic Regression':
+        IR_model(choice_input)
+
+    elif choice_model == 'Mô hình FMR':
+        FMR_model(choice_input)
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
@@ -206,6 +228,7 @@ if __name__ == '__main__':
     model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
     model_dt = DecisionTreeRegressionModel.load("./model/decision_tree/dt_basic")
     model_ir = IsotonicRegressionModel.load("./model/isotonic_regression/ir_basic")
+    model_fmr = FMRegressionModel.load("./model/factorization_machines_regression/fmr_basic")
 
 
     main()
