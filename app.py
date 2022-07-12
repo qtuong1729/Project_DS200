@@ -93,7 +93,7 @@ if __name__ == '__main__':
     st_df = st.dataframe(data.toPandas())
     ## Load model
     model_lr.load('./model/linear_regression/lr_basic')
-    model_full = LinearRegressionModel.load("./model/lr_basic")
+    model_full = LinearRegressionModel.load(sc,"./model/lr_basic")
     st.write("have lr")
 
 
