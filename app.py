@@ -50,7 +50,7 @@ def main():
     st.title('Dự đoán tỷ lệ tử vong trên quy mô dân số do Covid-19')
 
     features_train = ['Mô hình 1',
-                      'Mô hình 2]
+                      'Mô hình 2']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
 
     input = ['Dữ liệu mẫu', 'Tự chọn']
