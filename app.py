@@ -38,14 +38,3 @@ st.write("## Create RDD from a Python list")
 
 
 # spark.stop()
-
-if __name__ == '__main__':
-    spark, sc = _initialize_spark()
-
-    #sc = SparkContext.getOrCreate();
-    #spark = SparkSession(sc)
-    ## Load dataset
-    ## Load model
-
-
-    main()
