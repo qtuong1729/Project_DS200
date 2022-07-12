@@ -7,11 +7,22 @@ import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel
 
-st.write("# :tada: Hello Pyspark")
-st.write("[Link to Spark window](http://localhost:4040)")
+def encode(X):
+    # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
+    X_ = X.copy()
+    
+    # Biến categories có thứ tự
+    X_[['Income group']] = ode.transform(X_[['Income group']])
+    
+    # Biến categories không thứ tự
+    f_ohe = ohe.transform(X_[['Continent', 'WHO Region']])
+    labels = np.array(ohe.categories_).ravel()
+    cat_ohe = pd.DataFrame(f_ohe, columns=labels, index=X_.index)
 
-st.write("## Create RDD from a Python list")
-
+    X_ = X_.drop(['Continent', 'WHO Region'], axis=1)
+    X_ = pd.concat([X_, cat_ohe], axis=1)
+    
+    return X_
 def prediction(samples, model):
     st.write("predict")
     # Encode dữ liệu
@@ -51,7 +62,7 @@ def LR_model(choice_input):
 
         # Chọn dữ liệu từ mẫu
         selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = data.pd_df.loc[selected_indices]
+        selected_rows = pd_df.loc[selected_indices]
 
         st.write('#### Kết quả')
 
@@ -72,13 +83,12 @@ def LR_model(choice_input):
 # spark.stop()
 def main():
     st.title('Dự đoán giá bất động sản')
-    st_df = st.dataframe(pd_df)
     features_train = ['Mô hình 1',
                       'Mô hình 2']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', features_train)
-    st.write("hello")
+    #st.write("hello")
     input = ['Dữ liệu mẫu', 'Tự chọn']
-    st.write("hello")
+    #st.write("hello")
     choice_input = st.sidebar.selectbox('Chọn kiểu nhập dữ liệu:', input)
 
     if choice_model == 'Mô hình 1':
