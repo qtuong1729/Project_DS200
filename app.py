@@ -13,10 +13,10 @@ def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
     ###########################
-    X_=spark.createDataFrame(X_)
-    st.write("sparkDf")
-    assembled_X = assembler.transform(X_)
-    scaled_X = standardScaler.fit(assembled_df).transform(assembled_X)
+
+
+
+
     ###########################
     st.write("tranform")
     return assembled_X
