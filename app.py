@@ -60,7 +60,7 @@ def LR_model(choice_input):
 
         if st.button('Dự đoán'):
             if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
+                X = selected_rows
                 pred = prediction(X, model_lr)
 
                 # Xuất ra màn hình
