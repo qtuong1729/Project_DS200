@@ -13,7 +13,7 @@ def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
     X_ = X.copy()
     assembled_X = assembler.transform(X_)
-    
+    st.write("tranform")
     return assembled_X
 
 def prediction(samples, model):
@@ -214,6 +214,7 @@ if __name__ == '__main__':
         df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     #st.write("data ready")
+    data = data.fillna(0)
     pd_df = data.toPandas()
     features = data.columns
     features = [ele for ele in features if ele not in ['MaTin','TongGia','Gia/m2']]
