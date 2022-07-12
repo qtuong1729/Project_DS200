@@ -38,8 +38,7 @@ st.write("## Create RDD from a Python list")
 # spark.stop()
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
-    df = spark.read.format('org.apache.spark.sql.json').load(r"qtuong1729/Project_DS200/clean/clean.json")
-    
+    df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
     
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
     df=df.withColumnRenamed("T.T thương mại tòa nhà","TT thương mại tòa nhà")
