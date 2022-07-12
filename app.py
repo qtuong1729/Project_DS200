@@ -21,6 +21,7 @@ def prediction(samples, model):
     # Encode dữ liệu
     X_scaled = tranformFetures(samples, assembler)
     # Predict
+    st.write("predict")
     return model.predict(X_scaled)
 
 def LR_model():
@@ -38,6 +39,7 @@ def LR_model():
             pred = prediction(X, model_lr)
 
             # Xuất ra màn hình
+            st.write("predict", pred)
             results = pd.DataFrame({'Giá dự đoán': pred,
                                         'Giá thực tế': selected_rows.TongGia})
             st.write(results)
@@ -62,7 +64,7 @@ def RF_model():
 
             # Xuất ra màn hình
             results = pd.DataFrame({'Giá dự đoán': pred,
-                                        'Giá thực tế': selected_rows.death_rate})
+                                        'Giá thực tế': selected_rows.TongGia})
             st.write(results)
         else:
             st.error('Hãy chọn dữ liệu trước')
@@ -85,7 +87,7 @@ def GBT_model():
 
             # Xuất ra màn hình
             results = pd.DataFrame({'Giá dự đoán': pred,
-                                        'Giá thực tế': selected_rows.death_rate})
+                                    'Giá thực tế': selected_rows.TongGia})
             st.write(results)
         else:
             st.error('Hãy chọn dữ liệu trước')
