@@ -168,7 +168,7 @@ def FMR_model():
 
 def main():
     st.title('Dự đoán giá bất động sản')
-    fig = px.ecdf(pd_df, x="TongGia", color="sex", ecdfnorm=None)
+    fig = px.ecdf(pd_df, x="TongGia", color="LoaiBDS_idx", ecdfnorm=None)
     #st.plotly_chart(fig, use_container_width=True)
     #fig = ff.create_distplot(
         # hist_data, group_labels)
