@@ -5,6 +5,7 @@ from utils import _initialize_spark
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
 from pyspark.sql.functions import udf, col
+from pyspark.ml.regression import LinearRegression
 
 st.write("# :tada: Hello Pyspark")
 st.write("[Link to Spark window](http://localhost:4040)")
@@ -66,6 +67,7 @@ def main():
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
+    ## Load dataset
     df = spark.read.format('org.apache.spark.sql.json').load("./clean/clean.json")
     st.write("df ready")
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
@@ -89,8 +91,11 @@ if __name__ == '__main__':
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     st.write("data ready")
     st_df = st.dataframe(data.toPandas())
-    ## Load dataset
     ## Load model
-    
+    model_lr.load('./model/linear_regression/lr_basic')
+    model_full = LinearRegression.load("./model/lr_basic")
+    st.write("have lr")
+
+
     main()
 
