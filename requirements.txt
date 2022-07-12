@@ -2,5 +2,3 @@ streamlit
 numpy
 pandas
 pyspark
-plotly
-plotly_express

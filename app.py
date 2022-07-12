@@ -172,7 +172,7 @@ def main():
     #fig = ff.create_distplot(
         # hist_data, group_labels)
     #st.plotly_chart(fig, use_container_width=True)
-    st.line_chart(pd_df['LoaiBDS_idx','TongGia'])
+    #st.line_chart(pd_df['LoaiBDS_idx','TongGia'])
     model_list = ['Mô hình Linear Regression',
                       'Mô hình Random Forest',
                       'Mô hình Gradient Boosting',
