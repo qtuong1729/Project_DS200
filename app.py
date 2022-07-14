@@ -171,7 +171,7 @@ def creat_dashboard(df):
 
     col1.metric(label="Số lượng dự án", value=df.shape[0])
 
-    col2.metric(label="Giá tiền trung bình mỗi dự án", value=(df['TongGia'].mean()))
+    col2.metric(label="Giá tiền trung bình mỗi dự án", value=round(df['TongGia'].mean()))
 
     st.subheader('Dashboard')
     fig = px.histogram(df, x="Tinh", color="LoaiBDS")
