@@ -168,10 +168,8 @@ def FMR_model():
 
 def creat_dashboard():
     st.subheader('Dashboard')
-    #fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS",)
-    df = px.data.tips()
-    fig = px.bar(df, x="sex", y="total_bill", color="smoker", barmode="group", facet_row="time", facet_col="day",
-       category_orders={"day": ["Thur", "Fri", "Sat", "Sun"], "time": ["Lunch", "Dinner"]})
+    fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS")
+        
     st.plotly_chart(fig, use_container_width=True)
 
 def main():
