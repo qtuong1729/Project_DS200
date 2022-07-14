@@ -168,7 +168,7 @@ def FMR_model():
 
 def creat_dashboard():
     st.subheader('Dashboard')
-    fig = px.bar(pd_df, x="Tinh", y="count", color="LoaiBDS",)
+    fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS",)
     st.plotly_chart(fig, use_container_width=True)
 
 def main():
