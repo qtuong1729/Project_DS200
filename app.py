@@ -168,6 +168,7 @@ def FMR_model():
 
 def creat_dashboard(df):
     st.set_page_config(layout="wide")
+
     st.subheader('Dashboard')
     fig = px.histogram(df, x="Tinh", color="LoaiBDS")
 
