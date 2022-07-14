@@ -202,7 +202,7 @@ def main():
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
     ## Load dataset
-    df = spark.read.format('org.apache.spark.sql.json').load(".data/clean/clean.json")
+    df = spark.read.format('org.apache.spark.sql.json').load("./data/clean/clean.json")
     #st.write("df ready")
     df=df.withColumnRenamed("P. sinh hoạt chung","Phòng sinh hoạt chung")
     df=df.withColumnRenamed("T.T thương mại tòa nhà","TT thương mại tòa nhà")
