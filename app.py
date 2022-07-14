@@ -169,7 +169,7 @@ def FMR_model():
 def creat_dashboard(df):
     col1, col2 = st.columns(2)
 
-    col1.metric(label="Số lượng dự án", value=len(df.shape[0]))
+    col1.metric(label="Số lượng dự án", value=df.shape[0])
 
     col2.metric(label="Giá tiền trung bình mỗi dự án", value=(df['TongGia'].mean()))
 
