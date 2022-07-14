@@ -167,7 +167,13 @@ def FMR_model():
             st.error('Hãy chọn dữ liệu trước')
 
 def creat_dashboard(df):
-    #st.set_page_config(layout="wide")
+    col1, col2 = st.columns(3)
+
+    col1.metric(label="Số lượng dự án",
+    value=len(df.shape[0]))
+
+    col2.metric(label="Giá tiền trung bình mỗi dự án",
+    value=(df['TongGia'].mean()))
 
     st.subheader('Dashboard')
     fig = px.histogram(df, x="Tinh", color="LoaiBDS")
