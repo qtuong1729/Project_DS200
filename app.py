@@ -169,8 +169,8 @@ def FMR_model():
 def creat_dashboard():
     st.subheader('Dashboard')
     fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS")
-        
-    st.plotly_chart(fig, use_container_width=True)
+
+    st.plotly_chart(fig)
 
 def main():
     st.title('Dự đoán giá bất động sản')
