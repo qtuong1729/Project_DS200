@@ -167,18 +167,14 @@ def FMR_model():
             st.error('Hãy chọn dữ liệu trước')
 
 def creat_dashboard(df):
+    st.set_page_config(layout="wide")
     st.subheader('Dashboard')
     fig = px.histogram(df, x="Tinh", color="LoaiBDS")
 
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 def main():
     st.title('Dự đoán giá bất động sản')
-    #st.plotly_chart(fig, use_container_width=True)
-    #fig = ff.create_distplot(
-        # hist_data, group_labels)
-    #st.plotly_chart(fig, use_container_width=True)
-    #st.line_chart(pd_df['LoaiBDS_idx','TongGia'])
     model_list = ['Dashboard',
                     'Mô hình Linear Regression',
                     'Mô hình Random Forest',
