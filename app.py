@@ -175,6 +175,7 @@ def creat_dashboard(df):
     st.plotly_chart(fig, use_container_width=True)
 
 def main():
+    st.set_page_config(layout="wide")
     st.title('Dự đoán giá bất động sản')
     model_list = ['Dashboard',
                     'Mô hình Linear Regression',
