@@ -166,9 +166,9 @@ def FMR_model():
         else:
             st.error('Hãy chọn dữ liệu trước')
 
-def creat_dashboard():
+def creat_dashboard(df):
     st.subheader('Dashboard')
-    fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS")
+    fig = px.histogram(df, x="Tinh", color="LoaiBDS")
 
     st.plotly_chart(fig)
 
@@ -190,7 +190,7 @@ def main():
 
 
     if choice_model =='Dashboard':
-        creat_dashboard()
+        creat_dashboard(pd_df)
     elif choice_model == 'Mô hình Linear Regression':
         LR_model()
 
@@ -230,8 +230,8 @@ if __name__ == '__main__':
             'Tủ bếp', 'Tủ lạnh', 'Tủ quần áo', 'Tủ trang trí', 'Vòi hoa sen', 'Điện ba pha', 'Thân thiện', 'Trí thức',
             'Bảo vệ 24/24', 'Carmera an ninh', 'Đường bê tông', 'Đường trải nhựa', 'Đường trải đá', 'Đường đất']
     #st.write("have cols")
-    for col_name in cols:
-        df = df.withColumn(col_name, col(col_name).cast('int'))
+    #for col_name in cols:
+    #    df = df.withColumn(col_name, col(col_name).cast('int'))
     data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
     #st.write("data ready")
     data = data.fillna(0)
