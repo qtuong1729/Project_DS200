@@ -169,26 +169,27 @@ def FMR_model():
 def creat_dashboard(df):
     st.subheader('Dashboard')
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     col1.metric(label="Số lượng dự án", value=df.shape[0])
     col2.metric(label="Giá tiền trung bình mỗi dự án", value=round(df['TongGia'].mean()))
-    df2 = pd_df.groupby('LoaiBDS').size().reset_index(name='Observation')
-    values = df2['Observation']
-    names = df2['LoaiBDS']
-    fig = px.pie(values=values, names=names, title = 'Tỷ lệ các loại BDS')
-    col3.plotly_chart(fig, use_container_width=False)
 
-    fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS", labels={
+    fig1 = px.histogram(pd_df, x="Tinh", color="LoaiBDS", labels={
                      "Tinh": "Tỉnh(Thành phố)",
                      "LoaiBDS": "Loại BDS"
                  },)
-    st.plotly_chart(fig, use_container_width=True)
-    
-    fig1 = px.histogram(pd_df, x="LoaiBDS", y="TongGia", histfunc='avg', labels = {
+    st.plotly_chart(fig1, use_container_width=True)
+    fig_col2, fig_col3 = st.columns(2)
+
+    fig2 = px.histogram(pd_df, x="LoaiBDS", y="TongGia", histfunc='avg', labels = {
             "LoaiBDS": "Loại BDS",
             "TongGia": "price"
         })
-    fig_col1.plotly_chart(fig1)
+
+    pd_df2 = pd_df.groupby('LoaiBDS').size().reset_index(name='Observation')
+    fig3 = px.pie(pd_df2, values='Observation', names='LoaiBDS', title = 'Tỷ lệ các loại BDS')
+    
+    fig_col2.plotly_chart(fig2)
+    fig_col3.plotly_chart(fig3)
 
 def main():
     st.set_page_config(layout="wide")
