@@ -167,7 +167,7 @@ def FMR_model():
             st.error('Hãy chọn dữ liệu trước')
 
 def creat_dashboard(df):
-    col1, col2 = st.columns(3)
+    col1, col2 = st.columns(2)
 
     col1.metric(label="Số lượng dự án",
     value=len(df.shape[0]))
