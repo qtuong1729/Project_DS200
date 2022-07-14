@@ -175,8 +175,8 @@ def creat_dashboard(df):
     df2 = pd_df.groupby('LoaiBDS').size().reset_index(name='Observation')
     values = df2['Observation']
     names = df2['LoaiBDS']
-    fig = px.pie(values=values, names=names)
-    col3.plotly_chart(fig, use_container_width=True, title = 'Tỷ lệ các loại BDS')
+    fig = px.pie(values=values, names=names, title = 'Tỷ lệ các loại BDS')
+    col3.plotly_chart(fig, use_container_width=False)
 
     fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS", labels={
                      "Tinh": "Tỉnh(Thành phố)",
