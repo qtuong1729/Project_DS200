@@ -174,7 +174,10 @@ def creat_dashboard(df):
     col2.metric(label="Giá tiền trung bình mỗi dự án", value=round(df['TongGia'].mean()))
 
     st.subheader('Dashboard')
-    fig = px.histogram(df, x="Tinh", color="LoaiBDS")
+    fig = px.histogram(pd_df, x="Tinh", color="LoaiBDS", labels={
+                     "Tinh": "Tỉnh",
+                     "LoaiBDS": "Loại BDS"
+                 },)
 
     st.plotly_chart(fig, use_container_width=True)
 
