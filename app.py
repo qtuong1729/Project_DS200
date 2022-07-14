@@ -8,6 +8,7 @@ from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel, FMRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
+import plotly.express as px
 
 
 def tranformFetures(X, assembler):
@@ -20,14 +21,14 @@ def tranformFetures(X, assembler):
 
     ###########################
     st.write("tranform")
-    return assembled_X
+    return X_tranform
 
 def prediction(samples, model):
     st.write("predict")
     # Encode dữ liệu
-    X_scaled = tranformFetures(samples, assembler)
+    X = tranformFetures(samples, assembler)
     # Predict
-    return model.predict(X_scaled)
+    return model.predict(X)
 
 def LR_model():
     st.subheader('Mô hình Linear Regression')
@@ -165,6 +166,10 @@ def FMR_model():
         else:
             st.error('Hãy chọn dữ liệu trước')
 
+def creat_dashboard():
+    st.subheader('Dashboard')
+    fig = px.bar(pd_df, x="Tinh", y="count", color="LoaiBDS",)
+    st.plotly_chart(fig, use_container_width=True)
 
 def main():
     st.title('Dự đoán giá bất động sản')
@@ -173,15 +178,19 @@ def main():
         # hist_data, group_labels)
     #st.plotly_chart(fig, use_container_width=True)
     #st.line_chart(pd_df['LoaiBDS_idx','TongGia'])
-    model_list = ['Mô hình Linear Regression',
-                      'Mô hình Random Forest',
-                      'Mô hình Gradient Boosting',
-                      'Mô hình Decision Tree',
-                      'Mô hình Isotonic Regression',
-                      'Mô hình FMR']
+    model_list = ['Dashboard',
+                    'Mô hình Linear Regression',
+                    'Mô hình Random Forest',
+                    'Mô hình Gradient Boosting',
+                    'Mô hình Decision Tree',
+                    'Mô hình Isotonic Regression',
+                    'Mô hình FMR']
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
 
-    if choice_model == 'Mô hình Linear Regression':
+
+    if choice_model =='Dashboard':
+        creat_dashboard()
+    elif choice_model == 'Mô hình Linear Regression':
         LR_model()
 
     elif choice_model == 'Mô hình Random Forest':
