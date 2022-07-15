@@ -29,7 +29,7 @@ def prediction(samples, model):
     # Predict
     return model.predict(X)
 
-def model_pred(model_name, model):
+def model_page(model_name, model):
     option_list = ['Dữ liệu mẩu',
                     'Tự nhập dữ liệu']
     
@@ -121,22 +121,22 @@ def main():
     if choice_model =='Dashboard':
         creat_dashboard(pd_df)
     elif choice_model == 'Mô hình Linear Regression':
-        model_pred(choice_model, model_lr)
+        model_page(choice_model, model_lr)
 
     elif choice_model == 'Mô hình Random Forest':
-        model_pred(choice_model, model_rf)
+        model_page(choice_model, model_rf)
 
     elif choice_model == 'Mô hình Gradient Boosting':
-        model_pred(choice_model, model_gbt)
+        model_page(choice_model, model_gbt)
 
     elif choice_model == 'Mô hình Decision Tree':
-        model_pred(choice_model, model_dt)
+        model_page(choice_model, model_dt)
 
     elif choice_model == 'Mô hình Isotonic Regression':
-        model_pred(choice_model, model_ir)
+        model_page(choice_model, model_ir)
 
     elif choice_model == 'Mô hình FMR':
-        model_pred(choice_model, model_fmr)
+        model_page(choice_model, model_fmr)
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
