@@ -33,9 +33,9 @@ def LR_model():
     option_list = ['Dữ liệu mẩu',
                     'Tự nhập dữ liệu']
     
-    choice_input = st.sidebar.selectbox('Mô hình huấn luyện trên:', option_list)    
+    choice_input = st.sidebar.selectbox('Cách nhập dữ liệu', option_list)    
     st.subheader('Mô hình Linear Regression')
-    if choice_input == 'Dữ liệu mẫu':
+    if choice_input == 'Dữ liệu mẩu':
         st.write('#### Sample dataset', pd_df)
 
         # Chọn dữ liệu từ mẫu
