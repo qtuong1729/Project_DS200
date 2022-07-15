@@ -78,8 +78,6 @@ def model_page(model_name, model):
                                             'Giá thực tế': selected_rows.TongGia})
                 st.write(results)
 
-
-
 def creat_dashboard(df):
     st.subheader('Dashboard')
 
@@ -146,10 +144,6 @@ if __name__ == '__main__':
     #st.write("data ready")
     data = data.fillna(0)
     pd_df = data.toPandas()
-    features = data.columns
-    features = [ele for ele in features if ele not in ['MaTin','TongGia','Gia/m2']]
-    assembler = VectorAssembler(inputCols = features, outputCol="features")
-    standardScaler = StandardScaler(inputCol="features", outputCol="features_scaled")
 
     ## Load model
     model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
