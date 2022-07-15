@@ -18,7 +18,6 @@ def tranformFetures(X, assembler):
 
 
 
-
     ###########################
     st.write("tranform")
     return X_tranform
@@ -33,7 +32,10 @@ def prediction(samples, model):
 def LR_model():
     st.subheader('Mô hình Linear Regression')
     st.write('#### Sample dataset', pd_df)
-
+    option_list = ['Dữ liệu mẩu',
+                    'Tự nhập dữ liệu']
+    
+    choice_input = st.sidebar.selectbox('Mô hình huấn luyện trên:', option_list)
     # Chọn dữ liệu từ mẫu
     selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
     selected_rows = pd_df.loc[selected_indices]
