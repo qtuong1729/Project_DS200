@@ -58,9 +58,9 @@ def LR_model():
     elif choice_input == 'Tự nhập dữ liệu':
         with st.form("Nhập dữ liệu"):
 
-            feature1 = st.slider("Feature 1")
-            feature2 = st.input_text("feature 1")
-            feature3 = st.checkbox("Feature 3")
+            feature1 = st.text_input("Feature 1")
+            feature2 = st.text_input("feature 2")
+            feature3 = st.text_input("Feature 3")
 
             # Every form must have a submit button.
             submitted = st.form_submit_button("Submit")
