@@ -140,7 +140,7 @@ if __name__ == '__main__':
     spark, sc = _initialize_spark()
     ## Load dataset
     df = spark.read.format('org.apache.spark.sql.json').load("./data/clean/clean.json")
-    data = df.drop(*['TienIchGanDat','id','NgayDangBan', 'MoTa_Vec'])
+    data = df.drop(*['id','NgayDangBan', 'MoTa'])
     #st.write("data ready")
     data = data.fillna(0)
     pd_df = data.toPandas()
