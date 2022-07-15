@@ -30,29 +30,52 @@ def prediction(samples, model):
     return model.predict(X)
 
 def LR_model():
-    st.subheader('Mô hình Linear Regression')
-    st.write('#### Sample dataset', pd_df)
     option_list = ['Dữ liệu mẩu',
                     'Tự nhập dữ liệu']
     
-    choice_input = st.sidebar.selectbox('Mô hình huấn luyện trên:', option_list)
-    # Chọn dữ liệu từ mẫu
-    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-    selected_rows = pd_df.loc[selected_indices]
-    st.write('#### Kết quả')
+    choice_input = st.sidebar.selectbox('Mô hình huấn luyện trên:', option_list)    
+    st.subheader('Mô hình Linear Regression')
+    if choice_input == 'Dữ liệu mẫu':
+        st.write('#### Sample dataset', pd_df)
 
-    if st.button('Dự đoán'):
-        if not selected_rows.empty:
-            X = selected_rows.iloc[:, :-1]
-            pred = prediction(X, model_lr)
+        # Chọn dữ liệu từ mẫu
+        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+        selected_rows = pd_df.loc[selected_indices]
+        st.write('#### Kết quả')
 
-            # Xuất ra màn hình
-            st.write("predict", pred)
-            results = pd.DataFrame({'Giá dự đoán': pred,
-                                        'Giá thực tế': selected_rows.TongGia})
-            st.write(results)
-        else:
-            st.error('Hãy chọn dữ liệu trước')
+        if st.button('Dự đoán'):
+            if not selected_rows.empty:
+                X = selected_rows.iloc[:, :-1]
+                pred = prediction(X, model_lr)
+
+                # Xuất ra màn hình
+                st.write("predict", pred)
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                            'Giá thực tế': selected_rows.TongGia})
+                st.write(results)
+            else:
+                st.error('Hãy chọn dữ liệu trước')
+    elif choice_input == 'Tự nhập dữ liệu':
+        with st.form("Nhập dữ liệu"):
+
+            feature1 = st.slider("Feature 1")
+            feature2 = st.input_text("feature 1")
+            feature3 = st.checkbox("Feature 3")
+
+            # Every form must have a submit button.
+            submitted = st.form_submit_button("Submit")
+            if submitted:
+                data_submitted = {'feature 1' : feature1,
+                                    'feature 2' : feature2,
+                                    'feature 3': feature3}
+                X = pd.DataFrame(data_submitted, index=[0])
+                pred = prediction(X, model_lr)
+
+                # Xuất ra màn hình
+                st.write("predict", pred)
+                results = pd.DataFrame({'Giá dự đoán': pred,
+                                            'Giá thực tế': selected_rows.TongGia})
+                st.write(results)
 
 
 
