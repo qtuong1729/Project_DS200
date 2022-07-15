@@ -29,55 +29,6 @@ def prediction(samples, model):
     # Predict
     return model.predict(X)
 
-def LR_model():
-    option_list = ['Dữ liệu mẩu',
-                    'Tự nhập dữ liệu']
-    
-    choice_input = st.sidebar.selectbox('Cách nhập dữ liệu', option_list)    
-    st.subheader('Mô hình Linear Regression')
-    if choice_input == 'Dữ liệu mẩu':
-        st.write('#### Sample dataset', pd_df)
-
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
-
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model_lr)
-
-                # Xuất ra màn hình
-                st.write("predict", pred)
-                results = pd.DataFrame({'Giá dự đoán': pred,
-                                            'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
-
-    elif choice_input == 'Tự nhập dữ liệu':
-        with st.form("Nhập dữ liệu"):
-
-            feature1 = st.text_input("Feature 1")
-            feature2 = st.text_input("feature 2")
-            feature3 = st.text_input("Feature 3")
-
-            # Every form must have a submit button.
-            submitted = st.form_submit_button("Submit")
-            if submitted:
-                data_submitted = {'feature 1' : feature1,
-                                    'feature 2' : feature2,
-                                    'feature 3': feature3}
-                X = pd.DataFrame(data_submitted, index=[0])
-                pred = prediction(X, model_lr)
-
-                # Xuất ra màn hình
-                st.write("predict", pred)
-                results = pd.DataFrame({'Giá dự đoán': pred,
-                                            'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-
 def model_pred(model_name, model):
     option_list = ['Dữ liệu mẩu',
                     'Tự nhập dữ liệu']
@@ -170,22 +121,22 @@ def main():
     if choice_model =='Dashboard':
         creat_dashboard(pd_df)
     elif choice_model == 'Mô hình Linear Regression':
-        model_pred('choice_model', model_lr)
+        model_pred(choice_model, model_lr)
 
     elif choice_model == 'Mô hình Random Forest':
-        model_pred('choice_model', model_rf)
+        model_pred(choice_model, model_rf)
 
     elif choice_model == 'Mô hình Gradient Boosting':
-        model_pred('choice_model', model_gbt)
+        model_pred(choice_model, model_gbt)
 
     elif choice_model == 'Mô hình Decision Tree':
-        model_pred('choice_model', model_dt)
+        model_pred(choice_model, model_dt)
 
     elif choice_model == 'Mô hình Isotonic Regression':
-        model_pred('choice_model', model_ir)
+        model_pred(choice_model, model_ir)
 
     elif choice_model == 'Mô hình FMR':
-        model_pred('choice_model', model_fmr)
+        model_pred(choice_model, model_fmr)
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
