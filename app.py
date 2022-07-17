@@ -89,9 +89,11 @@ def inser_data():
     with st.form("Nhập dữ liệu"):
         loaiBDS = st.text_input("Loại BDS")
         dienTich = st.text_input("Diện Tích")
-        feature3 = st.text_input("Feature 3")
-        with st.expander("See explanation"):
-            
+        hienTrangNha = st.text_input("Hiện Trạng Nhà")
+        with st.expander("Thêm thông tin"):
+            loaiBDS = st.text_input("Loại BDS")
+            dienTich = st.text_input("Diện Tích")
+            hienTrangNha = st.text_input("Hiện Trạng Nhà")
 
         submitted = st.form_submit_button("Dự Đoán)
 
