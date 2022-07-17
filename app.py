@@ -3,6 +3,10 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
+from contextlib import contextmanager, redirect_stdout
+from io import StringIO
+from time import sleep
+
 from utils import _initialize_spark
 from pyspark.sql.types import *
 from pyspark.sql import functions as f
@@ -16,6 +20,21 @@ from crawl_url import *
 from crawl_data import *
 from clean_data import *
 from train_model import *
+
+
+
+@contextmanager
+def st_capture(output_func):
+    with StringIO() as stdout, redirect_stdout(stdout):
+        old_write = stdout.write
+
+        def new_write(string):
+            ret = old_write(string)
+            output_func(stdout.getvalue())
+            return ret
+        
+        stdout.write = new_write
+        yield
 
 @st.cache
 def modelLoading():
@@ -178,5 +197,8 @@ if __name__ == '__main__':
     (lambda n: [None for _ in range(n)])(5)
 
     modelLoading()
-    
+    output = st.empty()
+    with st_capture(output.code):
+        print(data.show())
+        
     main()
