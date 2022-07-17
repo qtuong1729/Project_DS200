@@ -159,7 +159,7 @@ def create_dashboard(df):
         })
 
     pd_df2 = df.groupby('LoaiBDS').size().reset_index(name='Observation')
-    fig3 = px.pie(pd_df, values='Observation', names='LoaiBDS', title = 'Tỷ lệ các loại BDS')
+    fig3 = px.pie(pd_df2, values='Observation', names='LoaiBDS', title = 'Tỷ lệ các loại BDS')
 
     fig_col2.plotly_chart(fig2)
     fig_col3.plotly_chart(fig3)
