@@ -19,8 +19,14 @@ from train_model import *
 
 @st.cache
 def modelLoading():
+<<<<<<< HEAD
+    global model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo
+
+    with st.spinner('Load model set (2/2)...'):
+=======
     global model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo
     with st.spinner('Load model set ...'):
+>>>>>>> d99e9372b6b148630b66eb15df7149546fb03988
         model_lr_rmo = LinearRegressionModel.load("./model/linear_regression/lr_outlierRm")
         model_rf_rmo = RandomForestRegressionModel.load("./model/random_forest/rf_outlierRm")
         model_gbt_rmo = GBTRegressionModel.load("./model/gradient_boosted/gbt_outlierRm")
@@ -72,7 +78,6 @@ def inser_data():
         feature2 = st.text_input("feature 2")
         feature3 = st.text_input("Feature 3")
 
-        # Every form must have a submit button.
         submitted = st.form_submit_button("Submit")
         if submitted:
             data_submitted = {'feature 1' : feature1,
@@ -131,6 +136,8 @@ def create_dashboard(df):
     fig_col2.plotly_chart(fig2)
     fig_col3.plotly_chart(fig3)
 
+    st.write(pd_df)
+
 def main():
     st.title('Dự đoán giá bất động sản')
     model_list = ['Dashboard',
@@ -146,19 +153,19 @@ def main():
     if choice_model =='Dashboard':
         create_dashboard(pd_df)
     elif choice_model == 'Mô hình Linear Regression':
-        model_page(choice_model, model_lr)
+        model_page(choice_model, model_lr_rmo)
 
     elif choice_model == 'Mô hình Random Forest':
-        model_page(choice_model, model_rf)
+        model_page(choice_model, model_rf_rmo)
 
     elif choice_model == 'Mô hình Gradient Boosting':
-        model_page(choice_model, model_gbt)
+        model_page(choice_model, model_gbt_rmo)
 
     elif choice_model == 'Mô hình Decision Tree':
-        model_page(choice_model, model_dt)
+        model_page(choice_model, model_dt_rmo)
 
     elif choice_model == 'Mô hình Isotonic Regression':
-        model_page(choice_model, model_ir)
+        model_page(choice_model, model_ir_rmo)
 
 
 if __name__ == '__main__':
