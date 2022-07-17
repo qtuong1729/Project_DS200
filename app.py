@@ -87,11 +87,14 @@ def load_sample_data():
 
 def inser_data():
     with st.form("Nhập dữ liệu"):
-        feature1 = st.text_input("Feature 1")
-        feature2 = st.text_input("feature 2")
+        loaiBDS = st.text_input("Loại BDS")
+        dienTich = st.text_input("Diện Tích")
         feature3 = st.text_input("Feature 3")
+        with st.expander("See explanation"):
+            
 
-        submitted = st.form_submit_button("Submit")
+        submitted = st.form_submit_button("Dự Đoán)
+
         if submitted:
             data_submitted = {'feature 1' : feature1,
                                 'feature 2' : feature2,
@@ -135,7 +138,17 @@ def create_dashboard(df):
                      "Tinh": "Tỉnh(Thành phố)",
                      "LoaiBDS": "Loại BDS"
                  },)
+
+    pd_df2 = pd_df.copy()
+    pd_df2['NgayDangBan'] = pd.to_datetime(pd_df2['NgayDangBan']).dt.date
+    
+    fig_date = px.histogram(pd_df2, x="NgayDangBan", labels={
+                        "NgayDangBan": "Ngày Đăng bán",
+                    },)
+    
     st.plotly_chart(fig1, use_container_width=True)
+    st.plotly_chart(fig_date, use_container_width=True)
+
     fig_col2, fig_col3 = st.columns(2)
 
     fig2 = px.histogram(pd_df, x="LoaiBDS", y="TongGia", histfunc='avg', labels = {
@@ -143,8 +156,8 @@ def create_dashboard(df):
             "TongGia": "price"
         })
 
-    pd_df2 = pd_df.groupby('LoaiBDS').size().reset_index(name='Observation')
-    fig3 = px.pie(pd_df2, values='Observation', names='LoaiBDS', title = 'Tỷ lệ các loại BDS')
+    pd_df2 = df.groupby('LoaiBDS').size().reset_index(name='Observation')
+    fig3 = px.pie(pd_df, values='Observation', names='LoaiBDS', title = 'Tỷ lệ các loại BDS')
 
     fig_col2.plotly_chart(fig2)
     fig_col3.plotly_chart(fig3)
