@@ -106,10 +106,10 @@ def inser_data():
             data_submitted = {'LoaiBDS' : loaiBDS,
                                 'DienTich' : dienTich,
                                 'Tinh': tinh,
-                                'hienTrangNha': hienTrangNha
+                                'hienTrangNha': hienTrangNha,
                                 'ViTri': viTri,
                                 'PhongNgu': phongNgu,
-                                'PhongTam': phongTam
+                                'PhongTam': phongTam,
                                 'Tang': tang}
             X = pd.DataFrame(data_submitted, index=[0])
             pred = prediction(X, model)
