@@ -87,20 +87,30 @@ def load_sample_data():
 
 def inser_data():
     with st.form("Nhập dữ liệu"):
-        loaiBDS = st.text_input("Loại BDS")
-        dienTich = st.text_input("Diện Tích")
+        loaiBDS = st.text_input("Loại BDS*")
+        dienTich = st.text_input("Diện Tích*")
+        tinh = st.text_input("Tỉnh\Thành phố*")
         hienTrangNha = st.text_input("Hiện Trạng Nhà")
-        with st.expander("Thêm thông tin"):
-            loaiBDS = st.text_input("Loại BDS")
-            dienTich = st.text_input("Diện Tích")
-            hienTrangNha = st.text_input("Hiện Trạng Nhà")
+        viTri = st.text_input("Vị trí")
+        phongNgu = st.text_input("Số phòng ngủ")
+        phongTam = st.text_input("Số phòng tắm")
+        tang = st.text_input("Số tầng")
+#        with st.expander("Thêm thông tin"):
+#            loaiBDS = st.text_input("Loại BDS")
+#            dienTich = st.text_input("Diện Tích")
+#            hienTrangNha = st.text_input("Hiện Trạng Nhà")
 
         submitted = st.form_submit_button("Dự Đoán")
 
         if submitted:
-            data_submitted = {'feature 1' : feature1,
-                                'feature 2' : feature2,
-                                'feature 3': feature3}
+            data_submitted = {'LoaiBDS' : loaiBDS,
+                                'DienTich' : dienTich,
+                                'Tinh': tinh,
+                                'hienTrangNha': hienTrangNha
+                                'ViTri': viTri,
+                                'PhongNgu': phongNgu,
+                                'PhongTam': phongTam
+                                'Tang': tang}
             X = pd.DataFrame(data_submitted, index=[0])
             pred = prediction(X, model)
 
