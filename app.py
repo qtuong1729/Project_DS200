@@ -223,7 +223,5 @@ if __name__ == '__main__':
 
     modelLoading()
     output = st.empty()
-    with st_capture(output.code):
-        print(data.show())
         
     main()
