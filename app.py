@@ -1,14 +1,21 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import plotly.express as px
+
 from utils import _initialize_spark
 from pyspark.sql.types import *
-import pyspark.sql.functions as f
+from pyspark.sql import functions as f
 from pyspark.sql.functions import udf, col
 from pyspark.ml.regression import LinearRegressionModel, RandomForestRegressionModel, GBTRegressionModel, DecisionTreeRegressionModel, IsotonicRegressionModel, FMRegressionModel
 from pyspark.ml.feature import VectorAssembler, StandardScaler
 from pyspark.ml.evaluation import RegressionEvaluator
-import plotly.express as px
+
+from utils import *
+from crawl_url import *
+from crawl_data import *
+from clean_data import *
+from train_model import *
 
 
 def tranformFetures(X, assembler):

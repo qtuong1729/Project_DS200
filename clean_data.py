@@ -1,6 +1,4 @@
 from pyspark.sql import DataFrame
-from pyspark.ml import PipelineModel
-from typing import Tuple
 
 # {{{ Column classification
 IDENTIFIER = ['MaTin']
@@ -46,7 +44,6 @@ CATEGORICAL_COLUMNS = [
 ]
 # }}}
 
-### CLEANING DATA
 # Count null value
 def countNull(df: DataFrame) -> DataFrame:
     import plotly.express as px
@@ -64,8 +61,9 @@ def fillEmptyValue(df: DataFrame) -> DataFrame:
     from pyspark.sql.functions import col, when
 
     for c in df.columns:
-        if c in ['TongGia','Gia/m2','DienTich','ChieuDai','ChieuRong','Huong','PhongNgu','PhongTam']:
-            df = df.withColumn(c, when(col(c)=='--', None).otherwise(col(c)).alias(c))
+        if c not in STRUCTURED_COLUMNS:
+            df = df.withColumn(c, when(col(c)=='--', None).otherwise(col(c)).alias(c))\
+                .withColumn(c, when(col(c)=='', None).otherwise(col(c)).alias(c))
 
     return df
 
@@ -123,17 +121,22 @@ def fillNullValue(df: DataFrame) -> DataFrame:
 
     if ('DienTich' in df.columns and 'DienTichDat' in df.columns):
         df = df.withColumn('DienTich', coalesce('DienTich', 'DienTichDat'))
+
     for column in df.columns: 
+
         if column in ['NamXayDung']:
             mode = df.select(column).where(col(column).isNotNull())\
                 .groupby(column).count()\
                 .orderBy("count", ascending=False).first()[0]
             df = df.fillna(value=mode, subset=[column])
+
         if column in ['ChieuDai', 'ChieuRong', 'DuongVao','DienTich']:
             mean = df.agg(avg(column)).first()[0]
             df = df.fillna(value=str(mean), subset=[column])
+
         if column in ['PhongNgu', 'PhongTam']:
             df = df.fillna(value='0', subset=[column])
+
         if column in ['SoTang']:
             df = df.fillna(value='1', subset=[column])
 
@@ -141,7 +144,6 @@ def fillNullValue(df: DataFrame) -> DataFrame:
             df = df.fillna(value='Unknowns', subset=[column])
 
         if column in STRUCTURED_COLUMNS:
-            #df = df.fillna(value=array(), subset=[column])
             df = df.withColumn(column, coalesce(column, array()))
 
 
@@ -155,7 +157,7 @@ def dropData(df: DataFrame, isTrain=True) -> DataFrame:
     else:
         df = df.dropna(subset=['MaTin','NgayDangBan'], how='any')
 
-    df = df.drop(*['DienTichDat','ChieuSau','Gia/m2'])
+    df = df.drop(*['DienTichDat','ChieuSau'])
     return df
 
 def typeCasting(df: DataFrame) -> DataFrame:
@@ -165,7 +167,7 @@ def typeCasting(df: DataFrame) -> DataFrame:
     float_columns = [
         c for c in CONTINUOUS_COLUMNS
         if c not in int_columns
-        and c not in ['ChieuSau','DienTichDat','Gia/m2']]
+        and c not in ['ChieuSau','DienTichDat']]
 
     for column in int_columns:
         df = df.withColumn(column, col(column).cast('int'))
@@ -183,155 +185,8 @@ def cleanRawData(df: DataFrame, isTrain=True) -> DataFrame:
     df5 = typeCasting(df4)
     return df5
 
-### FEATURES EXTRACTING
-def getDummy(df: DataFrame, outputCol='features_idx', keepInput=True, keepOutput=False) -> Tuple[DataFrame, PipelineModel]:
-    from pyspark.ml import Pipeline
-    from pyspark.ml.feature import StringIndexer, VectorAssembler
-
-    idx_columns = [c for c in CATEGORICAL_COLUMNS if not c in ['Tinh','Huyen','Xa']]
-    indexers = [ StringIndexer(inputCol=c, outputCol="{0}_idx".format(c))
-                 for c in idx_columns]
-    assembler = VectorAssembler(
-        inputCols=[indexer.getOutputCol() for indexer in indexers],
-        outputCol=outputCol)
-
-    pipeline = Pipeline(stages=indexers + [assembler])
-
-    model = pipeline.fit(df)
-    data = model.transform(df)
-
-    if keepInput:
-        pass
-    else:
-        data = data.drop(*idx_columns)
-
-    if keepOutput:
-        return data, model
-    else:
-        return data.drop(*['{0}_idx'.format(c) for c in idx_columns]), model
-
-def getAdministrative(df: DataFrame, outputCol='features_adm') -> DataFrame:
-    from pyspark.sql.functions import col, when
-    from pyspark.ml.feature import VectorAssembler
-    from pyspark.ml import Pipeline
-    from utils import _initialize_spark
-
-    spark, _ = _initialize_spark()
-
-    import pandas as pd
-    provinces_tier = pd.read_csv('data/provinces_tier.csv')
-    provinces_tier = spark.createDataFrame(provinces_tier)
-    df = df.join(provinces_tier, ['Tinh'], how='left')
-
-    data = df\
-        .withColumn('Tinh_idx',
-                    when(col('PhanLoaiTinh').contains('Đặc biệt'), 4)\
-                    .when(col('PhanLoaiTinh').contains('III'), 3)\
-                    .when(col('PhanLoaiTinh').contains('II'), 2)\
-                    .when(col('PhanLoaiTinh').contains('I'), 1))\
-        .withColumn('Huyen_idx',
-                    when(col('Huyen').contains('TP.'),3)\
-                    .when(col('Huyen').contains('Quận'),3)\
-                    .when(col('Huyen').contains('Thị xã'),2)\
-                    .when(col('Huyen').contains('Huyện'),1))\
-        .withColumn('Xa_idx',
-                    when(col('Xa').contains('Phường'), 3)\
-                    .when(col('Xa').contains('Thị trấn'), 2)\
-                    .when(col('Xa').contains('Xã'), 1))
-        
-    assembler = VectorAssembler(
-        inputCols=['Tinh_idx','Huyen_idx','Xa_idx'],
-        outputCol=outputCol)
-    data = assembler.transform(data)
-
-    return data.drop(*['Tinh','PhanLoaiTinh','Huyen','Xa'])
-
-class OHE():
-    '''
-    Sử dụng One Hot Encoder để transfom dữ liệu từ Array<value> -> Vector[value].
-    * categories : {'auto', array<>}, default='auto'.
-        - Tự động xác định danh sách giá trị phân loại hoặc sử dungk danh sách giá trị
-        phân loại được cấp từ array 
-    * dropInput : bool, defauly=False: Bỏ cột thuộc tính đầu vào)
-    '''
-    def __init__(self, categories='auto', dropInput=False):
-        self.categories = categories
-        self.dropInput = dropInput
-
-    def transform(self, df, feature):
-        from pyspark.sql.functions import monotonically_increasing_id, explode_outer, col, lit
-
-        self.feature = feature
-        df = df.withColumn("_id", monotonically_increasing_id() )
-
-        if self.categories == 'auto':
-            _idPrefix = '{0}_{1}'.format('_id', feature)
-            crosstab_df = df\
-                .withColumn(self.feature, explode_outer(self.feature))\
-                .crosstab('_id', self.feature)
-            cats_df = crosstab_df.drop(_idPrefix)
-            cats = cats_df.columns
-
-            if 'Other' in cats:
-                self.categories = cats
-            else:
-                self.categories = cats + ['Other']
-                cats_df = cats_df.withColumn('Other', lit(0))
-
-            self.categories.sort()
-            cats_df = cats_df.select(self.categories)
-
-            self.categories_prefix = [col(col_name).alias("{0}_".format(feature) + col_name) 
-                                      for col_name in cats_df.columns]
-            cats_df = cats_df.select(*self.categories_prefix)
-
-            cats_df = cats_df.withColumn("_id", monotonically_increasing_id() )
-            df = df.join(cats_df,'_id').drop('_id')
-
-        else:
-            _idPrefix = '{0}_{1}'.format('_id', feature)
-            crosstab_df = df\
-                .withColumn(self.feature, explode_outer(self.feature))\
-                    .crosstab('_id', self.feature)
-            cats_df = crosstab_df.drop(_idPrefix)
-
-            new_cats = [c for c in cats_df.columns if c not in self.categories]
-            miss_cats = [c for c in self.categories if c not in cats_df.columns]
- 
-            cats = cats_df.columns
-
-            if 'Other' in cats:
-                cats_df = cats_df.withColumn('Other', sum([col('Other')] + [col(cate) for cate in new_cats])).drop(*new_cats)
-            else:
-                miss_cats.remove('Other')
-                cats_df = cats_df.withColumn('Other', sum([col(cate)] for cate in new_cats)).drop(*new_cats)
-
-            for c in miss_cats:
-                cats_df = cats_df.withColumn(c, lit(0))
-
-            self.categories.sort()
-            cats_df = cats_df.select(self.categories)
-
-            self.categories_prefix = [col(col_name).alias("{0}_".format(feature) + col_name) 
-                                      for col_name in cats_df.columns]
-            cats_df = cats_df.select(*self.categories_prefix)
-
-            cats_df = cats_df.withColumn("_id", monotonically_increasing_id() )
-            df = df.join(cats_df,'_id').drop('_id')
-
-        if self.dropInput:
-            return df.drop(feature)
-        else:
-            return df
-
-def featureExtraction(df: DataFrame) -> DataFrame:
-    df1 = getAdministrative(df)
-    df2, _ = getDummy(df1, keepInput=False)
-    return df
-
-
 if __name__ == '__main__':
-    try:
+    '''try:
         df
     except NameError:
         df = spark.read.option("header",True)\
@@ -339,4 +194,4 @@ if __name__ == '__main__':
             .json("./data/raw/raw_0.json")
     else:
         df_clean = clean_raw_data(df)
-        df_featurize = feature_extraction(df_clean)
+        df_featurize = feature_extraction(df_clean)'''
