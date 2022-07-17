@@ -177,7 +177,5 @@ if __name__ == '__main__':
     (lambda n: [None for _ in range(n)])(5)
 
     modelLoading()
-
-    test = model_lr
-
+    
     main()
