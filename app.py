@@ -121,7 +121,41 @@ def inser_data():
             st.write(results)
 
 def get_data_from_URL():
-    st.write('#### Crawl URL')
+    st.write('#### Crawl dữ liệu từ URL')
+
+    with st.form(key='URL_form'):
+        URL = st.text_input(
+            label='Điền URL đến bài đăng bán BDS lấy từ https://nhadatvui.vn/ cần dự đoán.',
+            placeholder='https://nhadatvui.vn/bat-dong-san-ABC')
+        submit_button = st.form_submit_button(label='Submit')
+
+    if submit_button:
+        if not validateURL(URL):
+            noti = st.warning('URL không hợp lệ')
+        else:
+            try:
+                with st.spinner('Crawling ...'):
+                    status, postInfo = getdata(URL)
+            except:
+                noti = st.warning("Can't get URL")
+            else:
+                if status == 200:
+                    with st.spinner('Data processing ...'):
+                        post_pandasDF = pd.DataFrame.from_dict([postInfo])
+                        post_JSON = json.loads(json.dumps(list(post_pandasDF.T.to_dict().values())))
+                        post_pDF = spark.read.json(sc.parallelize([post_JSON]))
+                        post_clean = cleanData(post_pDF)
+                        #st.table(post_pandasDF)
+
+                        output = st.empty()
+                        with st_capture(output.code):
+                            print(post_clean.show())
+
+                    post_clean = post_clean.drop(*['MaTin','id','NgayDangBan','NguoiDangban','DiaChi','Gia/m2'])
+
+                    
+                else:
+                    print('Cant request url', status)
 
 def model_page(model_name, model):
     option_list = ['Dữ liệu mẫu', 'Nhập dữ liệu', 'Crawl dữ liệu từ URL']
