@@ -170,7 +170,6 @@ def main():
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
-
     st.set_page_config(layout="wide")
     ## Load dataset
     with st.spinner('Load data...'):
