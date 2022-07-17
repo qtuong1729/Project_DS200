@@ -19,14 +19,8 @@ from train_model import *
 
 @st.cache
 def modelLoading():
-<<<<<<< HEAD
-    global model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo
-
-    with st.spinner('Load model set (2/2)...'):
-=======
     global model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo
     with st.spinner('Load model set ...'):
->>>>>>> d99e9372b6b148630b66eb15df7149546fb03988
         model_lr_rmo = LinearRegressionModel.load("./model/linear_regression/lr_outlierRm")
         model_rf_rmo = RandomForestRegressionModel.load("./model/random_forest/rf_outlierRm")
         model_gbt_rmo = GBTRegressionModel.load("./model/gradient_boosted/gbt_outlierRm")
