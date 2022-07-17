@@ -141,10 +141,10 @@ def create_dashboard(df):
                      "LoaiBDS": "Loại BDS"
                  },)
 
-    pd_df2 = pd_df.copy()
-    pd_df2['NgayDangBan'] = pd.to_datetime(pd_df2['NgayDangBan']).dt.date
+    pd_date = pd_df.copy()
+    pd_date['NgayDangBan'] = pd.to_datetime(pd_df2['NgayDangBan']).dt.date
     
-    fig_date = px.histogram(pd_df2, x="NgayDangBan", labels={
+    fig_date = px.histogram(pd_date, x="NgayDangBan", labels={
                         "NgayDangBan": "Ngày Đăng bán",
                     },)
     
