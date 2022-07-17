@@ -17,6 +17,22 @@ from crawl_data import *
 from clean_data import *
 from train_model import *
 
+@st.cache
+def modelLoading():
+    global model_lr, model_rf, model_gbt, model_dt, model_ir, model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo
+    with st.spinner('Load model set (1/2)...'):
+        model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
+        model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
+        model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
+        model_dt = DecisionTreeRegressionModel.load("./model/decision_tree/dt_basic")
+        model_ir = IsotonicRegressionModel.load("./model/isotonic_regression/ir_basic")
+
+    with st.spinner('Load model set (2/2)...'):
+        model_lr_rmo = LinearRegressionModel.load("./model/linear_regression/lr_outlierRm")
+        model_rf_rmo = RandomForestRegressionModel.load("./model/random_forest/rf_outlierRm")
+        model_gbt_rmo = GBTRegressionModel.load("./model/gradient_boosted/gbt_outlierRm")
+        model_dt_rmo = DecisionTreeRegressionModel.load("./model/decision_tree/dt_outlierRm")
+        model_ir_rmo = IsotonicRegressionModel.load("./model/isotonic_regression/ir_outlierRm")
 
 def tranformFetures(X, assembler):
     # Tạo bản sao để tránh ảnh hưởng dữ liệu gốc
@@ -36,63 +52,74 @@ def prediction(samples, model):
     # Predict
     return model.predict(X)
 
+def load_sample_data():
+    # Chọn dữ liệu từ mẫu
+    selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
+    selected_rows = pd_df.loc[selected_indices]
+    st.write('#### Kết quả')
+
+    if st.button('Dự đoán'):
+        if not selected_rows.empty:
+            X = selected_rows.iloc[:, :-1]
+            pred = prediction(X, model)
+
+            # Xuất ra màn hình
+            st.write("predict", pred)
+            results = pd.DataFrame({
+                'Giá dự đoán': pred,
+                'Giá thực tế': selected_rows.TongGia
+                })
+            st.write(results)
+        else:
+            st.error('Hãy chọn dữ liệu trước')
+
+def inser_data():
+    with st.form("Nhập dữ liệu"):
+        feature1 = st.text_input("Feature 1")
+        feature2 = st.text_input("feature 2")
+        feature3 = st.text_input("Feature 3")
+
+        # Every form must have a submit button.
+        submitted = st.form_submit_button("Submit")
+        if submitted:
+            data_submitted = {'feature 1' : feature1,
+                                'feature 2' : feature2,
+                                'feature 3': feature3}
+            X = pd.DataFrame(data_submitted, index=[0])
+            pred = prediction(X, model)
+
+            # Xuất ra màn hình
+            st.write("predict", pred)
+            results = pd.DataFrame({'Giá dự đoán': pred,
+                                        'Giá thực tế': selected_rows.TongGia})
+            st.write(results)
+
+def get_data_from_URL():
+    st.write('#### Crawl URL')
+
 def model_page(model_name, model):
-    option_list = ['Dữ liệu mẩu',
-                    'Tự nhập dữ liệu']
+    option_list = ['Dữ liệu mẫu', 'Nhập dữ liệu', 'Crawl dữ liệu từ URL']
     
     choice_input = st.sidebar.selectbox('Cách nhập dữ liệu', option_list)    
     st.subheader(model_name)
-    if choice_input == 'Dữ liệu mẩu':
+    if choice_input == 'Dữ liệu mẫu':
         st.write('#### Sample dataset', pd_df)
+        load_sample_data()
 
-        # Chọn dữ liệu từ mẫu
-        selected_indices = st.multiselect('Chọn mẫu từ bảng dữ liệu:', pd_df.index)
-        selected_rows = pd_df.loc[selected_indices]
-        st.write('#### Kết quả')
+    elif choice_input == 'Nhập dữ liệu':
+        inser_data()
 
-        if st.button('Dự đoán'):
-            if not selected_rows.empty:
-                X = selected_rows.iloc[:, :-1]
-                pred = prediction(X, model)
+    elif choice_input == 'Crawl dữ liệu từ URL':
+        get_data_from_URL()
 
-                # Xuất ra màn hình
-                st.write("predict", pred)
-                results = pd.DataFrame({'Giá dự đoán': pred,
-                                            'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-            else:
-                st.error('Hãy chọn dữ liệu trước')
-
-    elif choice_input == 'Tự nhập dữ liệu':
-        with st.form("Nhập dữ liệu"):
-
-            feature1 = st.text_input("Feature 1")
-            feature2 = st.text_input("feature 2")
-            feature3 = st.text_input("Feature 3")
-
-            # Every form must have a submit button.
-            submitted = st.form_submit_button("Submit")
-            if submitted:
-                data_submitted = {'feature 1' : feature1,
-                                    'feature 2' : feature2,
-                                    'feature 3': feature3}
-                X = pd.DataFrame(data_submitted, index=[0])
-                pred = prediction(X, model)
-
-                # Xuất ra màn hình
-                st.write("predict", pred)
-                results = pd.DataFrame({'Giá dự đoán': pred,
-                                            'Giá thực tế': selected_rows.TongGia})
-                st.write(results)
-
-def creat_dashboard(df):
+def create_dashboard(df):
     st.subheader('Dashboard')
 
     col1, col2 = st.columns(2)
     col1.metric(label="Số lượng dự án", value=df.shape[0])
     col2.metric(label="Giá tiền trung bình mỗi dự án",
                 value="{:,} VND".format(round(df['TongGia'].mean() * 1000)))
-                
+
     fig1 = px.histogram(pd_df, x="Tinh", color="LoaiBDS", labels={
                      "Tinh": "Tỉnh(Thành phố)",
                      "LoaiBDS": "Loại BDS"
@@ -112,20 +139,19 @@ def creat_dashboard(df):
     fig_col3.plotly_chart(fig3)
 
 def main():
-    st.set_page_config(layout="wide")
     st.title('Dự đoán giá bất động sản')
     model_list = ['Dashboard',
                     'Mô hình Linear Regression',
                     'Mô hình Random Forest',
                     'Mô hình Gradient Boosting',
                     'Mô hình Decision Tree',
-                    'Mô hình Isotonic Regression',
-                    'Mô hình FMR']
+                    'Mô hình Isotonic Regression']
+    global choice_model
     choice_model = st.sidebar.selectbox('Mô hình huấn luyện trên:', model_list)
 
 
     if choice_model =='Dashboard':
-        creat_dashboard(pd_df)
+        create_dashboard(pd_df)
     elif choice_model == 'Mô hình Linear Regression':
         model_page(choice_model, model_lr)
 
@@ -141,26 +167,26 @@ def main():
     elif choice_model == 'Mô hình Isotonic Regression':
         model_page(choice_model, model_ir)
 
-    elif choice_model == 'Mô hình FMR':
-        model_page(choice_model, model_fmr)
 
 if __name__ == '__main__':
     spark, sc = _initialize_spark()
+
+    st.set_page_config(layout="wide")
     ## Load dataset
-    df = spark.read.format('org.apache.spark.sql.json').load("./data/clean/clean.json")
-    data = df.drop(*['id','NgayDangBan', 'MoTa'])
+    with st.spinner('Load data...'):
+        df = spark.read.format('org.apache.spark.sql.json').load("./data/clean/clean.json")
+    data = df.drop(*['id', 'MoTa'])
     #st.write("data ready")
     data = data.fillna(0)
     pd_df = data.toPandas()
 
     ## Load model
-    model_lr = LinearRegressionModel.load("./model/linear_regression/lr_basic")
-    model_rf = RandomForestRegressionModel.load("./model/random_forest/rf_basic")
-    model_gbt = GBTRegressionModel.load("./model/gradient_boosted/gbt_basic")
-    model_dt = DecisionTreeRegressionModel.load("./model/decision_tree/dt_basic")
-    model_ir = IsotonicRegressionModel.load("./model/isotonic_regression/ir_basic")
-    model_fmr = FMRegressionModel.load("./model/factorization_machines_regression/fmr_basic")
+    model_lr, model_rf, model_gbt, model_dt, model_ir,\
+    model_lr_rmo, model_rf_rmo, model_gbt_rmo, model_dt_rmo, model_ir_rmo = \
+    (lambda n: [None for _ in range(n)])(10)
 
+    modelLoading()
+
+    test = model_lr
 
     main()
-
